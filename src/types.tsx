@@ -7,12 +7,32 @@ export interface IHero {
 
 export interface ISlot {
     x: number, 
-    y: number
+    y: number, 
 }
 
 export interface ISquare {
     color: string,
     hero: IHero | undefined,
-    x?: number,
-    y?:number,
+    x: number,
+    y:number,
+    onClickHero: (object: ISlot) => void;
 }
+
+export interface ICanMoveItems {
+    wantedY: Number;
+    wantedX: Number;
+    currentY: Number;
+    currentX: Number;
+    optionXAxis: Number;
+    optionYAxis: Number;
+    isSameXAxis: Boolean;
+    isSameYAxis: Boolean;
+    color: string;
+  };
+
+export interface IClicks {
+    firstClick: ISlot | null,
+    secondClick: ISlot | null,
+}
+
+  

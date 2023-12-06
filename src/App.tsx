@@ -11,30 +11,48 @@ import ChessBoard  from './ChessBoard.tsx';
 import { useEffect, useState } from 'react';
 import InitialSoldiers  from './InitialSoldiers.tsx';
 import Square from './Square.tsx';
-import { IHero } from './types.tsx';
+import { IClicks, IHero, ISlot } from './types.tsx';
+import canMoveHero from './canMove.tsx';
 
 const App = ()  => {
 
   const [state, setState] = useState(InitialSoldiers());
   const [board, setBoard] = useState<any>();
+  const [clicks, setClicks] = useState<IClicks>({firstClick: null, secondClick: null});
+
   const findSoldier = (xAxis: number, yAxis) => {
     return state.find((value: IHero) => value.square.x === xAxis && value.square.y === yAxis);
   };
-  const renderSquare = (xAxis: number, yAxis: number) => {
+
+  const move = (hero: IHero, newCoords) => {
+    const modifiedState = {...state[]}
+  }
+
+  const clearClicks = () => {
+    setClicks({firstClick: null, secondClick: null})
+  }
+
+  const onClickHero = (object: ISlot, hero: IHero | undefined) => {
+
+    if(clicks.firstClick != null ){
+      if( (hero && clicks.firstClick) && canMoveHero(hero.name, hero.color, clicks.firstClick, object)){
+        //todo move
+        clearClicks();
+
+      }
+    } else{
+      setClicks({...clicks, firstClick: object});
+    }
+  };
+
+  const renderSquare = (xAxis: number, yAxis: number, hero: IHero | undefined) => {
+
+    const coords = {x: xAxis, y: yAxis};
+    
     if(yAxis % 2 === 0) {
-      //console.log(xAxis % 2 === 0, yAxis, 'FIRST')
-      if(xAxis % 2 === 0) {
-        return <Square color='black' hero={findSoldier(xAxis, yAxis)} x={xAxis} y={yAxis}/>
-      } else {
-        return <Square color='white' hero={findSoldier(xAxis, yAxis)} x={xAxis} y={yAxis}/>
-      }
+      return <Square onClickHero={() => onClickHero(coords, hero)} color={xAxis % 2 === 0 ? 'black' : 'white'} hero={hero} x={xAxis} y={yAxis}/>
     } else {
-      //console.log(xAxis % 2 !== 0, yAxis, 'SECOND', xAxis)
-      if((xAxis % 2 !== 0)) {
-        return <Square color='black' hero={findSoldier(xAxis, yAxis)} x={xAxis} y={yAxis}/>
-      } else {
-        return <Square color='white' hero={findSoldier(xAxis, yAxis)} x={xAxis} y={yAxis}/>
-      }
+      return <Square  onClickHero={() => onClickHero(coords, hero)} color={xAxis % 2 !== 0 ? 'black' : 'white'} hero={hero} x={xAxis} y={yAxis}/>
     }
   }
   useEffect(() => {
@@ -42,8 +60,8 @@ const App = ()  => {
     const board = new Array(8).fill(null).map(() => new Array(8));
     for(let yAxis = 0; yAxis < 8; yAxis++) {
       for(let xAxis = 0; xAxis < 8; xAxis++) {
-        console.log('X:', xAxis, 'Y:', yAxis)
-        board[yAxis][xAxis] = renderSquare(xAxis, yAxis);  
+        const hero = findSoldier(xAxis, yAxis);
+        board[yAxis][xAxis] = renderSquare(xAxis, yAxis, hero);  
       }
     }
     setBoard(board);
