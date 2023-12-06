@@ -18,41 +18,60 @@ const App = ()  => {
 
   const [state, setState] = useState(InitialSoldiers());
   const [board, setBoard] = useState<any>();
-  const [clicks, setClicks] = useState<IClicks>({firstClick: null, secondClick: null});
+  const [clicks, setClicks] = useState<IClicks>({firstClick: null, secondClick: null, clickedHero: null});
 
-  const findSoldier = (xAxis: number, yAxis) => {
+  const findSoldier = (xAxis: number, yAxis: number) => {
     return state.find((value: IHero) => value.square.x === xAxis && value.square.y === yAxis);
   };
 
-  const move = (hero: IHero, newCoords) => {
-    const modifiedState = {...state[]}
+  const move = (hero: IHero, newCoords: ISlot) => {
+    const index = state.findIndex((value: IHero) => value.id === hero.id);
+    const copyArray = [...state];
+    copyArray[index]  = {...hero, square: newCoords};
+    setState(copyArray);
   }
 
   const clearClicks = () => {
-    setClicks({firstClick: null, secondClick: null})
+    console.log('??')
+    setClicks({firstClick: null, secondClick: null, clickedHero: null})
   }
 
   const onClickHero = (object: ISlot, hero: IHero | undefined) => {
+    console.log('ONCLICKHERIO')
+    console.log('CLICKS', clicks)
+    if(clicks.firstClick === null && object && hero){
+      console.log('onClickhero true arvo', {firstClick: object, clickedHero: hero, secondClick: null})
 
-    if(clicks.firstClick != null ){
-      if( (hero && clicks.firstClick) && canMoveHero(hero.name, hero.color, clicks.firstClick, object)){
-        //todo move
-        clearClicks();
-
-      }
+      setClicks({firstClick: object, clickedHero: hero, secondClick: null});
+    
     } else{
-      setClicks({...clicks, firstClick: object});
+      console.log('Todo eat hero');
     }
   };
+
+  const onClickSquare = (object: ISlot) => {
+    console.log('?', clicks)
+    const name = clicks?.clickedHero?.name;
+    const color = clicks?.clickedHero?.color;
+    const clickedhero = clicks?.clickedHero;
+
+    if( (clicks.firstClick && name && color && clickedhero) && canMoveHero(name, color, clicks.firstClick, object)){
+      console.log('True arvo')
+      move(clickedhero, object);
+      clearClicks();
+    } else{
+      console.log('Elseen mentiin')
+    }
+  }
 
   const renderSquare = (xAxis: number, yAxis: number, hero: IHero | undefined) => {
 
     const coords = {x: xAxis, y: yAxis};
     
     if(yAxis % 2 === 0) {
-      return <Square onClickHero={() => onClickHero(coords, hero)} color={xAxis % 2 === 0 ? 'black' : 'white'} hero={hero} x={xAxis} y={yAxis}/>
+      return <Square onClickSquare={() => onClickSquare(coords)}  onClickHero={() => onClickHero(coords, hero)} color={xAxis % 2 === 0 ? 'black' : 'white'} hero={hero} x={xAxis} y={yAxis}/>
     } else {
-      return <Square  onClickHero={() => onClickHero(coords, hero)} color={xAxis % 2 !== 0 ? 'black' : 'white'} hero={hero} x={xAxis} y={yAxis}/>
+      return <Square  onClickSquare={() => onClickSquare(coords)} onClickHero={() => onClickHero(coords, hero)} color={xAxis % 2 !== 0 ? 'black' : 'white'} hero={hero} x={xAxis} y={yAxis}/>
     }
   }
   useEffect(() => {
@@ -65,7 +84,8 @@ const App = ()  => {
       }
     }
     setBoard(board);
-  }, []);
+    console.log('USE-EFFECT', state);
+  }, [clicks]);
  
 
   

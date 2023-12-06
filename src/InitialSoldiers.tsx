@@ -1,7 +1,7 @@
 import { IHero } from "./types";
 
 const InitialSoldiers = () => {
-
+    let z = 0;
     const soldiers:IHero[] = [];
     for (let i = 0; i < 8; i++) {
       soldiers.push({
@@ -11,13 +11,15 @@ const InitialSoldiers = () => {
         square: {x: i, y: 1}
       });
     }
-    for (let i = 0; i < 8; i++) {
+    for (let i = 8; i < 16; i++) {
       soldiers.push({
         name: 'soldier',
         color: 'white',
         id: i.toString(),
-        square: {x: i, y: 6}
+        square: {x: z, y: 6}
       });
+      z++;
+
     }
     const rooks = [{name: 'rook', color: 'black', id: 'br1', square: {x: 0, y: 0} }, {name: 'rook', color: 'white', id: 'wr1', square: {x: 0, y: 7} }, {name: 'rook', color: 'black', id: 'br2', square: {x: 7, y: 0} }, {name: 'rook', color: 'white', id: 'wr2', square: {x: 7, y: 7} }]
     const horses = [{name: 'horse', color: 'black', id: 'bh1', square: {x: 1, y: 0}}, {name: 'horse', color: 'black', id: 'bh2', square: {x: 6, y: 0}}, {name: 'horse', color: 'white', id: 'wh1', square: {x: 1, y: 7}}, {name: 'horse', color: 'white', id: 'wh2', square: {x: 6, y: 7}}]

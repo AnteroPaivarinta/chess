@@ -30,9 +30,7 @@ const Square = (props:ISquare) => {
         default:
           heroElement = null;
       }
-      const element = <div className={props.color === 'white' ? 'whiteSquare' : 'blackSquare'}> {heroElement && <div onClick={() => props.onClickHero(coords)} >{heroElement} </div>} {props.x} {props.y}  </div> 
-     
-
+      const element = <div onClick={() => props.onClickSquare(coords)} className={props.color === 'white' ? 'whiteSquare' : 'blackSquare'}> {heroElement && <div onClick={() => props.onClickHero(coords)} >{heroElement} </div>} {props.x} {props.y}  </div> 
     return element;
 }
 

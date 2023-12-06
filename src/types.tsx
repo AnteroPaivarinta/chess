@@ -16,6 +16,7 @@ export interface ISquare {
     x: number,
     y:number,
     onClickHero: (object: ISlot) => void;
+    onClickSquare: (object: ISlot) => void;
 }
 
 export interface ICanMoveItems {
@@ -31,6 +32,7 @@ export interface ICanMoveItems {
   };
 
 export interface IClicks {
+    clickedHero: IHero | undefined | null
     firstClick: ISlot | null,
     secondClick: ISlot | null,
 }
