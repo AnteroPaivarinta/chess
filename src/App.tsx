@@ -13,23 +13,36 @@ import InitialSoldiers  from './InitialSoldiers.tsx';
 import Square from './Square.tsx';
 import { IClicks, IHero, ISlot } from './types.tsx';
 import canMoveHero from './canMove.tsx';
+import { Eat } from './functions/eat.tsx';
+import { IsThereSholdier } from './functions/isThereSoldier.tsx';
+import { isLineClear } from './functions/isLineClear.tsx';
 
 const App = ()  => {
 
-  const [state, setState] = useState(InitialSoldiers());
+  const [state, setState] = useState<IHero[]>(InitialSoldiers());
   const [board, setBoard] = useState<any>();
   const [clicks, setClicks] = useState<IClicks>({firstClick: null, secondClick: null, clickedHero: null});
+  const [errorText, setErrorText] = useState<string>();
+
 
   const findSoldier = (xAxis: number, yAxis: number) => {
     return state.find((value: IHero) => value.square.x === xAxis && value.square.y === yAxis);
   };
 
   const move = (hero: IHero, newCoords: ISlot) => {
-    const index = state.findIndex((value: IHero) => value.id === hero.id);
-    const copyArray = [...state];
-    copyArray[index]  = {...hero, square: newCoords};
-    setState(copyArray);
+    if(IsThereSholdier(state, newCoords)){
+      setErrorText("There is already soldier");
+      clearClicks();
+    } else {
+      const index = state.findIndex((value: IHero) => value.id === hero.id);
+      const copyArray: IHero[] = [...state];
+      copyArray[index] = {...hero, square: newCoords};
+      setState(copyArray);
+    }
+    
   }
+
+
 
   const clearClicks = () => {
     console.log('??')
@@ -37,7 +50,6 @@ const App = ()  => {
   }
 
   const onClickHero = (object: ISlot, hero: IHero | undefined) => {
-    console.log('ONCLICKHERIO')
     console.log('CLICKS', clicks)
     if(clicks.firstClick === null && object && hero){
       console.log('onClickhero true arvo', {firstClick: object, clickedHero: hero, secondClick: null})
@@ -50,13 +62,15 @@ const App = ()  => {
   };
 
   const onClickSquare = (object: ISlot) => {
+    
     console.log('?', clicks)
     const name = clicks?.clickedHero?.name;
     const color = clicks?.clickedHero?.color;
     const clickedhero = clicks?.clickedHero;
 
     if( (clicks.firstClick && name && color && clickedhero) && canMoveHero(name, color, clicks.firstClick, object)){
-      console.log('True arvo')
+      let joo = isLineClear( state, object, clickedhero);
+      console.log("value", joo)
       move(clickedhero, object);
       clearClicks();
     } else{
@@ -71,7 +85,13 @@ const App = ()  => {
     if(yAxis % 2 === 0) {
       return <Square onClickSquare={() => onClickSquare(coords)}  onClickHero={() => onClickHero(coords, hero)} color={xAxis % 2 === 0 ? 'black' : 'white'} hero={hero} x={xAxis} y={yAxis}/>
     } else {
-      return <Square  onClickSquare={() => onClickSquare(coords)} onClickHero={() => onClickHero(coords, hero)} color={xAxis % 2 !== 0 ? 'black' : 'white'} hero={hero} x={xAxis} y={yAxis}/>
+        return <Square  
+            onClickSquare={() => onClickSquare(coords)}
+            onClickHero={() => onClickHero(coords, hero)} 
+            color={xAxis % 2 !== 0 ? 'black' : 'white'} 
+            hero={hero} 
+            x={xAxis} y={yAxis}
+          />
     }
   }
   useEffect(() => {
@@ -91,6 +111,7 @@ const App = ()  => {
   
   return (
     <div style={{height: '100vh', width: '100vw', display: 'flex', flexDirection: 'row', backgroundColor: 'green', alignContent: 'center', justifyContent: 'center'}}>
+      {errorText  && <div style={{color: "red"}}> {errorText} </div>}
       <div style={{display: 'flex', flexDirection: 'column', height: '100%', width: '70%', backgroundColor: 'purple'}}>
         { board && board.map((value:any) => 
           <div style={{display: 'flex', flexDirection: 'column', width: '100%', height: '100%', backgroundColor: 'blue'}}>

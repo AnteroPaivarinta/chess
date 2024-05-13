@@ -17,6 +17,9 @@ export const canMoveHero = (name: string, color: string, currentSlot: ISlot, wan
   const isSameXAxis = () => currentX === wantedX;
   const isSameYAxis = () => currentY === wantedY;
 
+  console.log('opttionX', optionXAxis);
+  console.log('opttionY', optionYAxis);
+
   const object: ICanMoveItems = {
     wantedX: wantedX,
     wantedY: wantedY,
