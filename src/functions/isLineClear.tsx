@@ -14,49 +14,64 @@ export const isLineClear = ( state: IHero[],  targetCoords: ISlot, movingHero: I
   console.log('ENDY', endY)
   console.log('ENDX', endX)
   if( movingHero.name === "bishop" ) {
-    if( startX < endX  && startY <= endY ) {
-      //console.log("Vaihe", 1)
-      let indexY = startY;
-      for(let i = startX; i <= endX; i++ ) {
-        let hero: IHero | undefined = state.find((value:IHero) => value.square.x  === i && value.square.y === indexY);
-        indexY = indexY + 1;
-        if(hero){
+    if( startX < endX  && startY < endY ) { // 4
+      console.log("Vaihe", 4)
+      let yIndex = startY;
+      for(let i = startX; i < endX; i++) {
+        let hero: IHero | undefined = state.find((value:IHero) => value.square.x  === i && value.square.y === yIndex);
+      
+        if(hero && hero.id != movingHero.id) {
+          console.log("HERO1", hero);
           bool = false;
           break;
         } 
+        yIndex++;
       }
     }
-    if( startX > endX  && startY >= endY  ) {
-      let indexY = startY;
-      //console.log("Vaihe", 2)
-      for(let i = endX; i <= startX; i++ ) {
+    if( startX > endX  && startY > endY  ) { // 1
+      console.log("Vaihe", 1)
+      let yIndex = endY;
+      for(let i = endX; i < startX; i++) {
+        let hero: IHero | undefined = state.find((value:IHero) => value.square.x  === i && value.square.y === yIndex);
+        console.log("ETSITÄÄN: X:"+i+", Y:"+yIndex)
        
-        let hero: IHero | undefined = state.find((value:IHero) => value.square.x  === i && value.square.y === indexY);
-        indexY = indexY + 1;
-        console.log("löytyykö sankaria X"+i+", Y: "+indexY)
-        if(hero){
+        if(hero && hero.id != movingHero.id){
+          console.log("HERO1", hero);
+          console.log("LÖYTYI PAIKASTA X: "+i+", Y: "+ yIndex);
           bool = false;
           break;
         } 
+        yIndex++;
       }
     }
-    if( startX > endX  && startY <= endY  ) {
-      let indexY = startY;
-      //console.log("Vaihe", 3)
-      for(let i = endX; i <= startX; i++ ) {
-        let hero: IHero | undefined = state.find((value:IHero) => value.square.x  === i && value.square.y === indexY);
-        indexY = indexY + 1;
-        if(hero){
+    if( startX > endX  && startY < endY  ) { // 3
+      console.log("Vaihe", 3)
+      let yIndex = endY;
+      for(let i = endX; i < startX; i++) {
+        let hero: IHero | undefined = state.find((value:IHero) => value.square.x  === i && value.square.y === yIndex);
+        if(hero && hero.id != movingHero.id){
+          console.log("HERO1", hero);
           bool = false;
           break;
         } 
+        yIndex--;
       }
     }
-    if( startX < endX  && startY >= endY  ) {
-      //onsole.log("Vaihe", 4)
+    if( startX < endX  && startY > endY  ) { //2
+      console.log("Vaihe", 2)
+      let yIndex = startY;
+      for(let i = startX; i < endX; i++) {
+        let hero: IHero | undefined = state.find((value:IHero) => value.square.x  === i && value.square.y === yIndex);
+       
+        if(hero && hero.id != movingHero.id){
+          console.log("HERO1", hero);
+          bool = false;
+          break;
+        } 
+        yIndex--;
+      }
     }
   }
-  console.log("tulostaako?");
   return bool;
 
 }

@@ -45,14 +45,12 @@ const App = ()  => {
 
 
   const clearClicks = () => {
-    console.log('??')
+    console.log('Cleared clicks')
     setClicks({firstClick: null, secondClick: null, clickedHero: null})
   }
 
   const onClickHero = (object: ISlot, hero: IHero | undefined) => {
-    console.log('CLICKS', clicks)
     if(clicks.firstClick === null && object && hero){
-      console.log('onClickhero true arvo', {firstClick: object, clickedHero: hero, secondClick: null})
 
       setClicks({firstClick: object, clickedHero: hero, secondClick: null});
     
@@ -63,18 +61,18 @@ const App = ()  => {
 
   const onClickSquare = (object: ISlot) => {
     
-    console.log('?', clicks)
     const name = clicks?.clickedHero?.name;
     const color = clicks?.clickedHero?.color;
     const clickedhero = clicks?.clickedHero;
 
     if( (clicks.firstClick && name && color && clickedhero) && canMoveHero(name, color, clicks.firstClick, object)){
       let joo = isLineClear( state, object, clickedhero);
-      console.log("value", joo)
+      console.log('LINECLEAR', joo);
       move(clickedhero, object);
       clearClicks();
     } else{
       console.log('Elseen mentiin')
+      
     }
   }
 
@@ -104,7 +102,6 @@ const App = ()  => {
       }
     }
     setBoard(board);
-    console.log('USE-EFFECT', state);
   }, [clicks]);
  
 
