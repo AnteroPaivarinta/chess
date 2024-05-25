@@ -44,7 +44,7 @@ export const canMoveHero = (name: string, color: string, currentSlot: ISlot, wan
     case 'rook':
      return RookPermission(object);
     case "queen":
-      return BishopPermission(object) && SoldierPermission(object) && KingPermission(object) && RookPermission(object);
+      return BishopPermission(object) || SoldierPermission(object) || KingPermission(object) || RookPermission(object);
   }
 }
 
