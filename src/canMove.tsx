@@ -1,9 +1,9 @@
 import { ICanMoveItems, ISlot } from "./types";
-import HorsePermission from "./movingPermissions/HorsePermission.tsx";
-import { BishopPermission } from "./movingPermissions/BishopPermission.tsx";
-import { SoldierPermission } from "./movingPermissions/SoldierPermission.tsx";
-import { KingPermission } from "./movingPermissions/KingPermission.tsx";
-import { RookPermission } from "./movingPermissions/RookPermission.tsx";
+import HorsePermission from "./movingPermissions/HorsePermission";
+import { BishopPermission } from "./movingPermissions/BishopPermission";
+import { SoldierPermission } from "./movingPermissions/SoldierPermission";
+import { KingPermission } from "./movingPermissions/KingPermission";
+import { RookPermission } from "./movingPermissions/RookPermission";
 
 
 export const canMoveHero = (name: string, color: string, currentSlot: ISlot, wantedSlot: ISlot) => {

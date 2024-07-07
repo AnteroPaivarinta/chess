@@ -1,21 +1,12 @@
 import './App.css';
 import React from 'react';
-import {
-  IconLookup,
-  IconDefinition,
-  findIconDefinition
-} from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChessRook } from '@fortawesome/free-solid-svg-icons'
-import ChessBoard  from './ChessBoard.tsx';
 import { useEffect, useState } from 'react';
-import InitialSoldiers  from './InitialSoldiers.tsx';
-import Square from './Square.tsx';
-import { IClicks, IHero, ISlot } from './types.tsx';
-import canMoveHero from './canMove.tsx';
-import { Eat } from './functions/eat.tsx';
-import { IsThereSholdier } from './functions/isThereSoldier.tsx';
-import { isLineClear } from './functions/isLineClear.tsx';
+import InitialSoldiers  from './InitialSoldiers';
+import Square from './Square';
+import { IClicks, IHero, ISlot } from './types';
+import canMoveHero from './canMove';
+import { IsThereSholdier } from './functions/isThereSoldier';
+import { isLineClear } from './functions/isLineClear';
 
 const App = ()  => {
 

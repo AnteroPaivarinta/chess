@@ -1,5 +1,7 @@
 
 import { IHero, ISlot } from "../types";
+import isLineClearHorizontal from "./isLineClear/isLineClearHorizontal";
+import isLineClearVertical from "./isLineClear/isLineClearVertical";
 
 export const isLineClear = ( state: IHero[],  targetCoords: ISlot, movingHero: IHero ) => {
   
@@ -11,12 +13,12 @@ export const isLineClear = ( state: IHero[],  targetCoords: ISlot, movingHero: I
 
   const isXSame = () => startX === endX;
   const isYSame = () => startY === endY;
-
-
   console.log('STARTX', startX)
   console.log('STARTY', startY)
   console.log('ENDY', endY)
   console.log('ENDX', endX)
+
+  console.log("isXSAME", isXSame())
   switch(movingHero.name) {
     case "bishop":
 
@@ -135,34 +137,26 @@ export const isLineClear = ( state: IHero[],  targetCoords: ISlot, movingHero: I
           yIndex--;
         }
       }
-      if(isXSame()){ 
-        const value  =  endY < startY ? true : false;
-        const startIndex = value ? endY : startY;
-        const endIndex = value ? startX : endX;
-        for(let i = startIndex; i < endIndex; i++) {
-          let hero: IHero | undefined = state.find((value:IHero) => value.square.x  === startX && value.square.y === i); // StartX  or endX, X is same
-          if(hero && hero.id != movingHero.id) {
-            console.log("HERO1", hero);
-            bool = false;
-            break;
-          } 
-        }
+      if( isXSame() ) { 
+
+        bool = isLineClearVertical( state, targetCoords, movingHero )
       }
 
-      if(isYSame()){ 
-        const value  =  endX < startX ? true : false;
-        const startIndex = value ? endX : startX;
-        const endIndex = value ? startX : endX;
-        for(let i = startIndex; i < endIndex; i++) {
-          let hero: IHero | undefined = state.find((value:IHero) => value.square.x  === i && value.square.y === startY); // StartY  or endY, Y is same
-          if(hero && hero.id != movingHero.id) {
-            console.log("HERO1", hero);
-            bool = false;
-            break;
-          } 
-        }
+      if( isYSame() ) {
+
+       bool = isLineClearVertical( state, targetCoords, movingHero)
+      }
+    case "rook":
+      if( isXSame() ) { 
+
+        bool = isLineClearVertical( state, targetCoords, movingHero )
       }
 
+      if( isYSame() ) {
+
+       bool = isLineClearHorizontal( state, targetCoords, movingHero)
+      }
+      
     default:
       // code block
   }
