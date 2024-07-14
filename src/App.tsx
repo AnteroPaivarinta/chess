@@ -20,6 +20,17 @@ const App = ()  => {
     return state.find((value: IHero) => value.square.x === xAxis && value.square.y === yAxis);
   };
 
+  const isKingUnderAttack = (hero: IHero) => {
+    const blackKing = state.find((value: IHero) => value.id === "bk");
+    const whiteKing = state.find((value: IHero) => value.id === "wk");
+    if( hero.color === "black" && whiteKing) {
+      return canMoveHero(hero.name, hero.color, hero.square, whiteKing?.square) ? true : false
+    } 
+    if(hero.color === "white" && blackKing) {
+      return canMoveHero(hero.name, hero.color, hero.square, blackKing?.square) ? true : false
+    }
+  }
+
   const move = (hero: IHero, newCoords: ISlot) => {
     if(IsThereSholdier(state, newCoords)){
       setErrorText("There is already soldier");
@@ -30,10 +41,7 @@ const App = ()  => {
       copyArray[index] = {...hero, square: newCoords};
       setState(copyArray);
     }
-    
   }
-
-
 
   const clearClicks = () => {
     console.log('Cleared clicks')
@@ -59,8 +67,19 @@ const App = ()  => {
     if( (clicks.firstClick && name && color && clickedhero) && canMoveHero(name, color, clicks.firstClick, object)){
       let joo = isLineClear( state, object, clickedhero);
       console.log('LINECLEAR', joo);
-      move(clickedhero, object);
-      clearClicks();
+      if(clickedhero.name === "horse"){ 
+        move(clickedhero, object);
+        clearClicks();
+      } else {
+        if( isLineClear(state, object, clickedhero) === true ) {
+          console.log("ISKINGUNDERATTACK", isKingUnderAttack(clickedhero))
+          move(clickedhero, object);
+          clearClicks();
+        } else {
+          setErrorText("Already soldier at line");
+          clearClicks();
+        }
+      }
     } else{
       console.log('Elseen mentiin')
       
