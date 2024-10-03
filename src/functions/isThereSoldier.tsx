@@ -2,6 +2,6 @@
 
 import { IHero, ISlot } from "../types";
 
-export const IsThereSholdier = (soldiersState: IHero[], targetCoords: ISlot) => {
+export const IsThereSoldier = (soldiersState: IHero[], targetCoords: ISlot) => {
   return soldiersState.find((value: IHero) => value.square.x === targetCoords.x && value.square.y === targetCoords.y) ? true : false
 }

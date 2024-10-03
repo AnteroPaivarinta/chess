@@ -5,7 +5,7 @@ import InitialSoldiers  from './InitialSoldiers';
 import Square from './Square';
 import { IClicks, IHero, ISlot } from './types';
 import canMoveHero from './canMove';
-import { IsThereSholdier } from './functions/isThereSoldier';
+import {  IsThereSoldier } from './functions/isThereSoldier';
 import { isLineClear } from './functions/isLineClear';
 
 const App = ()  => {
@@ -31,10 +31,30 @@ const App = ()  => {
     }
   }
 
+  const eat = (hero:IHero) => {
+    setState(state.filter((value) => value.id !== hero.id));
+    console.log(state.length)
+  }
+
   const move = (hero: IHero, newCoords: ISlot) => {
-    if(IsThereSholdier(state, newCoords)){
-      setErrorText("There is already soldier");
-      clearClicks();
+    if(IsThereSoldier(state, newCoords)){
+      let soldier:IHero | undefined = findSoldier(newCoords.x, newCoords.y);
+      if(soldier && clicks.clickedHero && soldier?.color !== clicks.clickedHero?.color) {
+        //EAT
+        
+        const index = state.findIndex((value: IHero) => value.id === hero.id);
+        let copyArray: IHero[] = [...state];
+        copyArray[index] = {...hero, square: newCoords};
+        
+        copyArray = copyArray.filter((value) => value.id !== soldier?.id); // Eat
+        setState(copyArray);
+        clearClicks();
+
+      } else {
+        setErrorText("There is already soldier");
+        clearClicks();
+      }
+      
     } else {
       const index = state.findIndex((value: IHero) => value.id === hero.id);
       const copyArray: IHero[] = [...state];
@@ -44,7 +64,6 @@ const App = ()  => {
   }
 
   const clearClicks = () => {
-    console.log('Cleared clicks')
     setClicks({firstClick: null, secondClick: null, clickedHero: null})
   }
 
@@ -65,14 +84,12 @@ const App = ()  => {
     const clickedhero = clicks?.clickedHero;
 
     if( (clicks.firstClick && name && color && clickedhero) && canMoveHero(name, color, clicks.firstClick, object)){
-      let joo = isLineClear( state, object, clickedhero);
-      console.log('LINECLEAR', joo);
+      
       if(clickedhero.name === "horse"){ 
         move(clickedhero, object);
         clearClicks();
       } else {
         if( isLineClear(state, object, clickedhero) === true ) {
-          console.log("ISKINGUNDERATTACK", isKingUnderAttack(clickedhero))
           move(clickedhero, object);
           clearClicks();
         } else {
